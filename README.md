@@ -2,6 +2,8 @@
 
 A real-time data pipeline for Nordic economic and company data, demonstrating core data engineering skills with Azure cloud services.
 
+[![Azure Static Web App](https://img.shields.io/badge/Azure-Dashboard-0078D4?logo=azure)](https://salmon-glacier-0eba51103.4.azurestaticapps.net)
+
 ## 🏗️ Architecture (Medallion)
 
 ```

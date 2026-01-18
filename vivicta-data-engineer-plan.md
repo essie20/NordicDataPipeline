@@ -141,16 +141,16 @@ Build a **real-time data pipeline** that demonstrates core data engineering skil
 - [x] Add error handling and logging
 - [x] Write SQL queries for data loading (Silver to Gold)
 
-### Phase 3: Automation & Documentation (Days 5-6) - IN PROGRESS 🏗️
-- [ ] Set up GitHub Actions for CI/CD
+### Phase 3: Automation & Documentation (Days 5-6) - COMPLETED ✅
+- [x] Set up GitHub Actions for CI/CD
 - [x] Add automated local orchestration (pipeline.py)
 - [x] Document infrastructure setup (SETUP.md)
 - [x] Document pipeline architecture (README.md)
 
-### Phase 4: Visualization & Polish (Days 7-8) - PENDING ⏳
-- [ ] Build React dashboard (Azure static web app)
-- [ ] Add data visualization components
-- [ ] Finalize comprehensive documentation
+### Phase 4: Visualization & Polish (Days 7-8) - COMPLETED ✅
+- [x] Build React dashboard (Azure static web app)
+- [x] Add data visualization components
+- [x] Finalize comprehensive documentation
 - [x] Create implementation diagrams
 
 ---
@@ -204,6 +204,7 @@ Build a **real-time data pipeline** that demonstrates core data engineering skil
 
 ## 📌 Quick Links
 
+- **Live Dashboard:** [Salmon Glacier (Azure)](https://salmon-glacier-0eba51103.4.azurestaticapps.net)
 - **Job Posting:** [Vivicta Junior Consultant](https://tieto.wd3.myworkdayjobs.com/Tieto_Careers_External_Site/job/Finland-Espoo/Junior-Consultant_R125224)
 - **Company Site:** [vivicta.com](https://www.vivicta.com)
 - **Junior Stories:** [Meet Our People](https://www.vivicta.com/en/meet-our-people/24/junior-talent-tech-services-FI/)
