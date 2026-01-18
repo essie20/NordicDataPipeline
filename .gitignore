@@ -32,7 +32,7 @@ build/
 *.parquet
 *.csv
 data/
-ignorefiles/*
+ignorefiles/
 
 # Logs
 *.log
