@@ -1,0 +1,43 @@
+# Environment
+.env
+*.env.local
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+ENV/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Secrets
+fingridvars.txt
+*.key
+*.pem
+
+# Build
+dist/
+build/
+*.egg-info/
+
+# Data files (local)
+*.parquet
+*.csv
+data/
+ignorefiles/*
+
+# Logs
+*.log
+logs/
+
+# Azure Functions
+local.settings.json
+.azure/

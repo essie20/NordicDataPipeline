@@ -1,0 +1,23 @@
+# Core Data Engineering
+pandas>=2.0.0
+requests>=2.31.0
+
+# Azure SDK
+azure-storage-blob>=12.19.0
+azure-identity>=1.15.0
+
+# SQL Database
+pyodbc>=5.0.0
+sqlalchemy>=2.0.0
+
+# Environment & Utilities
+python-dotenv>=1.0.0
+
+# Data Quality & Validation
+great-expectations>=0.18.0
+
+# Parquet support
+pyarrow>=15.0.0
+
+# Scheduling (optional for local dev)
+schedule>=1.2.0
