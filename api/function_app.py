@@ -72,9 +72,16 @@ def get_stats(req: func.HttpRequest) -> func.HttpResponse:
 
     except Exception as e:
         logging.error(f"Error connecting to DB: {str(e)}")
-        # If DB fails (e.g. firewall, drivers), return a helpful error
+        
+        # Debug info: Check available drivers
+        drivers = [d for d in pyodbc.drivers()]
+        
         return func.HttpResponse(
-            json.dumps({"error": str(e), "note": "Ensure Azure IP firewall is open and Env Vars are set"}),
+            json.dumps({
+                "error": str(e), 
+                "drivers": drivers,
+                "note": "Ensure Azure IP firewall is open and Env Vars are set"
+            }),
             mimetype="application/json",
             status_code=500
         )

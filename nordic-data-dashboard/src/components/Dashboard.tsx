@@ -43,6 +43,9 @@ export function Dashboard() {
                 if (res.ok) {
                     const data = await res.json();
                     setStats({ ...data, loading: false });
+                } else {
+                    const errText = await res.text();
+                    console.error("API Error Response:", errText);
                 }
             } catch (e) {
                 console.error("Failed to fetch API stats", e);
