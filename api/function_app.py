@@ -55,11 +55,11 @@ def get_stats(req: func.HttpRequest) -> func.HttpResponse:
 
             data = {
                 "electricity": {
-                    "latest_mw": latest_val,
-                    "total_records": count
+                    "latest_mw": float(latest_val),
+                    "total_records": int(count)
                 },
                 "companies": {
-                    "total": companies
+                    "total": int(companies)
                 },
                 "source": "Azure SQL Database"
             }
