@@ -15,8 +15,8 @@ def get_db_connection():
         database = os.environ.get('SQL_DATABASE')
         user = os.environ.get('SQL_USER')
         password = os.environ.get('SQL_PASSWORD')
-        driver = '{ODBC Driver 17 for SQL Server}'
-        conn_str = f'DRIVER={driver};SERVER={server};DATABASE={database};UID={user};PWD={password}'
+        driver = '{ODBC Driver 18 for SQL Server}'
+        conn_str = f'DRIVER={driver};SERVER={server};DATABASE={database};UID={user};PWD={password};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;'
     
     return pyodbc.connect(conn_str)
 
