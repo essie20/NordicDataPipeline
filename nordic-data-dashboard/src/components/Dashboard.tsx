@@ -11,6 +11,7 @@ import {
 import { StatCard } from "./StatCard";
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 
 // Mock data
 const chartData = [
@@ -22,6 +23,29 @@ const chartData = [
     { time: "20:00", price: 25.6, consumption: 9500 },
     { time: "23:59", price: 15.3, consumption: 8900 },
 ];
+
+// Initial mock data state, will be hydrated by API
+const [stats, setStats] = useState({
+    electricity: { latest_mw: 0, total_records: 0 },
+    companies: { total: 0 },
+    loading: true
+});
+
+useEffect(() => {
+    async function fetchData() {
+        try {
+            const res = await fetch('/api/stats');
+            if (res.ok) {
+                const data = await res.json();
+                setStats({ ...data, loading: false });
+            }
+        } catch (e) {
+            console.error("Failed to fetch API stats", e);
+        }
+    }
+    fetchData();
+}, []);
+
 
 export function Dashboard() {
     return (
@@ -61,24 +85,24 @@ export function Dashboard() {
                     />
                     <StatCard
                         title="Total Consumption"
-                        value="10.8 GWh"
-                        change="-2.1%"
-                        trend="down"
+                        value={stats.loading ? "..." : `${stats.electricity.latest_mw} MW`}
+                        change={stats.loading ? "" : "Live"}
+                        trend="neutral"
                         icon={Activity}
                         color="text-cyan-400"
                     />
                     <StatCard
-                        title="Grid Frequency"
-                        value="50.02 Hz"
-                        change="0.0%"
+                        title="Companies"
+                        value={stats.loading ? "..." : `${stats.companies.total}`}
+                        change="Registered"
                         trend="neutral"
                         icon={Battery}
                         color="text-green-400"
                     />
                     <StatCard
                         title="Data Points"
-                        value="1.2M"
-                        change="+8.4%"
+                        value={stats.loading ? "..." : `${stats.electricity.total_records}`}
+                        change="+24h"
                         trend="up"
                         icon={Database}
                         color="text-purple-400"
