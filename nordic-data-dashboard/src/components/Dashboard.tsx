@@ -24,30 +24,33 @@ const chartData = [
     { time: "23:59", price: 15.3, consumption: 8900 },
 ];
 
-// Initial mock data state, will be hydrated by API
-const [stats, setStats] = useState({
-    electricity: { latest_mw: 0, total_records: 0 },
-    companies: { total: 0 },
-    loading: true
-});
 
-useEffect(() => {
-    async function fetchData() {
-        try {
-            const res = await fetch('/api/stats');
-            if (res.ok) {
-                const data = await res.json();
-                setStats({ ...data, loading: false });
-            }
-        } catch (e) {
-            console.error("Failed to fetch API stats", e);
-        }
-    }
-    fetchData();
-}, []);
+
 
 
 export function Dashboard() {
+    // Initial mock data state, will be hydrated by API
+    const [stats, setStats] = useState({
+        electricity: { latest_mw: 0, total_records: 0 },
+        companies: { total: 0 },
+        loading: true
+    });
+
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const res = await fetch('/api/stats');
+                if (res.ok) {
+                    const data = await res.json();
+                    setStats({ ...data, loading: false });
+                }
+            } catch (e) {
+                console.error("Failed to fetch API stats", e);
+            }
+        }
+        fetchData();
+    }, []);
+
     return (
         <div className="min-h-screen bg-[#09090b] text-white p-8 font-sans selection:bg-cyan-500/30">
             <div className="max-w-7xl mx-auto space-y-8">
