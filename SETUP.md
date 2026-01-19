@@ -13,6 +13,7 @@ Complete guide to recreate the Azure infrastructure for NordicDataFlow from scra
 | **Gold Container** | ✅ Created | `gold` |
 | **SQL Server** | ✅ Created | `nordicdataflow-sql-3288` |
 | **SQL Database** | ✅ Created | `NordicDataDB` (Free tier) |
+| **Static Web App** | ✅ Deployed | `NordicDataDashboard` |
 | **Firewall Rules** | ✅ Configured | Azure IPs + Local Client |
 | **Python Environment** | ✅ Working | Python 3.11 via UV |
 | **Pipeline** | ✅ Tested | Full ETL cycle verified |
@@ -36,6 +37,7 @@ az account show --query "{name:name, subscriptionId:id}" -o table
 
 ### 4. ODBC Driver for SQL Server
 Download **ODBC Driver 17**: https://learn.microsoft.com/en-us/sql/connect/odbc/download-odbc-driver-for-sql-server
+*(Note: Azure Static Web Apps use Driver 18, but 17 is standard for local Windows dev)*
 
 Check installed drivers:
 ```powershell
@@ -133,15 +135,15 @@ az sql server create `
 ### Step 6: Configure Firewall Rules
 
 ```powershell
-# Allow Azure services
+# Allow Azure services (Required for Static Web App / API to connect)
 az sql server firewall-rule create `
   --resource-group NordicDataFlow-RG `
   --server nordicdataflow-sql-3288 `
-  --name AllowAllAzureIPs `
+  --name AllowAllWindowsAzureIps `
   --start-ip-address 0.0.0.0 `
   --end-ip-address 0.0.0.0
 
-# Allow your local IP
+# Allow your local IP (For local development)
 $myIp = (Invoke-WebRequest -Uri "https://api.ipify.org" -UseBasicParsing).Content
 az sql server firewall-rule create `
   --resource-group NordicDataFlow-RG `
@@ -150,6 +152,8 @@ az sql server firewall-rule create `
   --start-ip-address $myIp `
   --end-ip-address $myIp
 ```
+
+**Critical Note:** The `AllowAllWindowsAzureIps` rule is absolutely required for the deployed Azure Function API to talk to the database.
 
 ### Step 7: Create SQL Database (Free Tier)
 
@@ -174,9 +178,37 @@ Name          Tier            Family    Capacity    MaxSize
 NordicDataDB  GeneralPurpose  Gen5      1           32GB
 ```
 
+### Step 8: Deploy Static Web App
+
+To deploy the dashboard, use the Azure CLI from the project root. This command will also set up the GitHub Action workflow for CI/CD.
+
+```powershell
+az staticwebapp create `
+    --name NordicDataDashboard `
+    --resource-group NordicDataFlow-RG `
+    --source https://github.com/yourusername/NordicDataPipeline `
+    --location westeurope `
+    --branch master `
+    --app-location "nordic-data-dashboard" `
+    --api-location "api" `
+    --output-location "dist" `
+    --login-with-github
+```
+
+### Step 9: Configure Static Web App Environment Variables
+
+The deployed API needs credentials to access the SQL Database.
+
+```powershell
+az staticwebapp appsettings set `
+  --name NordicDataDashboard `
+  --resource-group NordicDataFlow-RG `
+  --setting-names SQL_SERVER="nordicdataflow-sql-3288.database.windows.net" SQL_DATABASE="NordicDataDB" SQL_USER="sqladmin" SQL_PASSWORD="YourSecurePassword123!"
+```
+
 ---
 
-## � Python Environment Setup
+## 🐍 Python Environment Setup
 
 ### Option A: Using UV (Recommended - Fast!)
 
@@ -248,6 +280,24 @@ python -m src.database    # Initialize DB
 python test_apis.py
 ```
 
+## 🌐 Running Frontend Locally
+
+You need two terminals to run the full stack locally:
+
+**Terminal 1: Backend API**
+```powershell
+cd api
+func start
+```
+
+**Terminal 2: Frontend Dashboard**
+```powershell
+cd nordic-data-dashboard
+npm run dev
+```
+
+The frontend (localhost:5173) will proxy requests to the backend (localhost:7071).
+
 ---
 
 ## ✅ Verification Commands
@@ -295,6 +345,7 @@ az group delete --name NordicDataFlow-RG --yes --no-wait
 |----------|------|----------------|
 | Storage Account | Standard LRS | ~$0.02/GB/month |
 | SQL Database | Free Tier | **$0** (100K vCore-seconds/month) |
+| Static Web App | Free Tier | **$0** |
 | **Total** | | **< $1/month** for dev usage |
 
 The Azure SQL Free Tier includes:
