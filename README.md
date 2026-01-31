@@ -162,4 +162,4 @@ NordicDataPipeline/
 
 ## 📄 License
 
-MIT License - Built for Vivicta Data Engineer application.
+MIT License
